@@ -1,6 +1,20 @@
 let computerChoice, playerChoice;
 let computerScore = 0;
 let playerScore = 0;
+const container = document.querySelector('.container');
+const outcome = document.querySelector('p');
+const currentScore = document.querySelector('#totalScore');
+const allButtons = document.querySelectorAll('button');
+const rockButton = document.getElementById('rock').addEventListener('click', function() {
+    game('rock');
+});;
+const paperButton = document.getElementById('paper').addEventListener('click', function() {
+    game('paper');
+});;
+const scissorsButton = document.getElementById('scissors').addEventListener('click', function() {
+    game('scissors');
+});;
+
 
 function computerPlay() {
     computerChoice;
@@ -19,10 +33,6 @@ function computerPlay() {
         default:
             break;
     }
-}
-
-function playersPlay() {
-    playerChoice = prompt('Select your choice: Rock Paper Scissors');
 }
 
 function compare(choiceOne, choiceTwo) {
@@ -60,23 +70,25 @@ function play(playerChoice, computerChoice) {
     }
 }
 
-function game() {
-    for(let i = 0; i < 5; i++) {
-        computerPlay();
-        playersPlay();
-        play(playerChoice, computerChoice);
-        console.log('Current score is: ', playerScore, ' and ', computerScore);
-    }
-    console.log('Final score is: ', playerScore, ' and ', computerScore);
+function game(playerChoice) {
+    play(playerChoice, computerChoice);
     if(playerScore > computerScore) {
-        console.log('The winner is Player!');
+        outcome.textContent = 'The winner is Player!';        
     }
     else if(playerScore < computerScore) {
-        console.log('The winner is Computer!');
+        outcome.textContent = 'The winner is Computer!';        
     }
     else {
-        console.log('It is a tie!');
+        outcome.textContent = 'It is a tie!';        
     }
+    currentScore.textContent = `Current score is ${playerScore} and ${computerScore}`;
 }
 
-game();
+for(let i = 0; i < 5; i++) {
+    allButtons.forEach((button) => button.addEventListener('click', function() {
+    
+    }));
+    console.log(i);
+    computerPlay();
+    playerSelection();
+}
