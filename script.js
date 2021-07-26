@@ -1,23 +1,17 @@
 let computerChoice, playerChoice;
 let computerScore = 0;
 let playerScore = 0;
+let moves = 0;
 const container = document.querySelector('.container');
-const outcome = document.querySelector('p');
+const outcome = document.querySelector('#outcome');
 const currentScore = document.querySelector('#totalScore');
-const allButtons = document.querySelectorAll('button');
-const rockButton = document.getElementById('rock').addEventListener('click', function() {
-    game('rock');
-});;
-const paperButton = document.getElementById('paper').addEventListener('click', function() {
-    game('paper');
-});;
-const scissorsButton = document.getElementById('scissors').addEventListener('click', function() {
-    game('scissors');
-});;
-
+const rockButton = document.querySelector('#rock');
+const paperButton = document.querySelector('#paper');
+const scissorsButton = document.querySelector('#scissors');
+const playerOptions = [rockButton, paperButton, scissorsButton];
+const movesText = document.querySelector('#moves');
 
 function computerPlay() {
-    computerChoice;
     randomNumber = Math.floor(Math.random() * 3) + 1;
 
     switch(randomNumber) {
@@ -48,47 +42,68 @@ function compare(choiceOne, choiceTwo) {
 }
 
 function play(playerChoice, computerChoice) {
-    console.log('Player choice: ', playerChoice.toLowerCase());
-    console.log('Computer choice: ', computerChoice);
-
     playerChoice = playerChoice.toLowerCase();
 
     if(playerChoice === computerChoice) {
-        console.log('It is a tie!');
+        outcome.textContent = `It is a tie! Computer chose ${computerChoice}`;        
     }
     else {
-        let outcome = compare(playerChoice, computerChoice);
-        console.log('Winner is: ', outcome);
-        if(outcome === playerChoice) {
-            console.log('Player wins!');
+        let result = compare(playerChoice, computerChoice);
+        if(result === playerChoice) {
             ++playerScore;
+            outcome.textContent = `The winner is Player! Computer chose ${computerChoice}`;        
+
         }
         else {
-            console.log('Computer wins!');
             ++computerScore;
+            outcome.textContent = `The winner is Computer! Computer chose ${computerChoice}`;        
         }
     }
 }
 
-function game(playerChoice) {
-    play(playerChoice, computerChoice);
-    if(playerScore > computerScore) {
-        outcome.textContent = 'The winner is Player!';        
-    }
-    else if(playerScore < computerScore) {
-        outcome.textContent = 'The winner is Computer!';        
-    }
-    else {
-        outcome.textContent = 'It is a tie!';        
-    }
-    currentScore.textContent = `Current score is ${playerScore} and ${computerScore}`;
+function game() {
+    computerScore = 0;
+    playerScore = 0;
+    moves = 0;
+    playerOptions.forEach(option => {
+        option.addEventListener('click', function(){
+            moves++;
+            computerPlay();
+            play(this.innerText, computerChoice);
+            currentScore.textContent = `Current score is ${playerScore} and ${computerScore}`;
+            movesText.textContent = `Moves finished: ${moves}`;
+            if(moves === 5) {
+                gameOver();
+            }
+        });
+    });
 }
 
-for(let i = 0; i < 5; i++) {
-    allButtons.forEach((button) => button.addEventListener('click', function() {
-    
-    }));
-    console.log(i);
-    computerPlay();
-    playerSelection();
+function gameOver() {
+    playerOptions.forEach(option => {
+        option.style.display = 'none';
+    });
+
+    if(playerScore === computerScore) {
+        outcome.style.color = 'yellow';
+        outcome.style.fontSize = '2rem';
+        outcome.style.fontWeight = 'bold';
+        outcome.textContent = 'It is a tie!';
+    }
+    else if(playerScore > computerScore) {
+        outcome.style.color = 'green';
+        outcome.style.fontSize = '2rem';
+        outcome.style.fontWeight = 'bold';
+        outcome.textContent = 'You have won!';
+    }
+    else {
+        outcome.style.color = 'red';
+        outcome.style.fontSize = '2rem';
+        outcome.style.fontWeight = 'bold';
+        outcome.textContent = 'The computer has won!';
+    }
+    currentScore.textContent = `Final score is ${playerScore} and ${computerScore}`;
+    movesText.textContent = 'Press F5 to restart';
 }
+
+game();
